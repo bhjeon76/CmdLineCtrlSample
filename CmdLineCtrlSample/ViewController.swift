@@ -51,13 +51,16 @@ class ViewController: NSViewController {
              
             excuteButton.isEnabled = false
             spinner.startAnimation(self)
+            
+            isRunning = true
         }
     }
     
     @IBAction func cancelButton(_ sender: Any) {
         
         if isRunning {
-            
+            spinner.stopAnimation(self)
+            isRunning = false
         }
     }
     
