@@ -767,7 +767,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <pathCell key="cell" controlSize="small" selectable="YES" editable="YES" alignment="left" pathStyle="popUp" id="ANx-59-mz0">
                                     <font key="font" metaFont="smallSystem"/>
-                                    <url key="url" string="file:///Users/bhjeon/CommandLineScope/"/>
+                                    <url key="url" string="file:///Users/bhjeon/CmdLineCtrlSample/"/>
                                 </pathCell>
                             </pathControl>
                             <button toolTip="Stop building the project" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zmk-hi-xwk" userLabel="Cancel Button">
