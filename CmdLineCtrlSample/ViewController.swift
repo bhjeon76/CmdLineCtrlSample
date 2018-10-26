@@ -36,55 +36,58 @@ class ViewController: NSViewController {
         
         outputText.string = ""
         
-        if let commandLineScopeURL = commandLineScopePath.url {
-            
-            let commandLineScopeLocation = commandLineScopeURL.path
-            let excutePath = commandLineScopeLocation
-            let excuteFileName = "./CommandLineSope"
+        if ((commandLineScopePath?.url) != nil) {
             
             var arguments:[String] = []
-            //arguments.append(excutePath)
-            //arguments.append(excuteFileName)
-            arguments.append(controlArgumentOption.stringValue)
             
-            print("arguments = \(arguments)")
-             
+            var cmdString = controlArgumentOption.stringValue
+            if (cmdString == "") {
+                cmdString = "-h"
+            }
+            arguments.append(cmdString)
+            
             excuteButton.isEnabled = false
             spinner.startAnimation(self)
             
             runScript(arguments)
-            
+            //print("arguments = \(arguments)")
         }
     }
-    
     
     @IBAction func cancelButton(_ sender: Any) {
         
         if isRunning {
+            
+            self.excuteButton.isEnabled = true
             spinner.stopAnimation(self)
             isRunning = false
+            
+            excuteTask.terminate()
         }
     }
     
     func runScript(_ arguments:[String]) {
         
+        let fileMgr = FileManager()
+        let path = "/Applications/CommandLineScope"
+        
+        let result = fileMgr.fileExists(atPath: path)
+        if result == false {
+            print("Unable to locate \(path)")
+            
+            self.excuteButton.isEnabled = true
+            self.spinner.stopAnimation(self)
+            return
+        }
+        
         isRunning = true
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 
         taskQueue.async {
-            
-//            guard let path = Bundle.main.path(forResource: "ExcuteScript",ofType:"command") else {
-//
-//                print("Unable to locate ExcuteScript.command")
-//                let path = Bundle.main.path(forResource: "ExcuteScript",ofType:"command")
-//                print("path = \(path)")
-//
-//                return
-//            }
-            
+
             self.excuteTask = Process()
-            self.excuteTask.launchPath = "/Users/bhjeon/CmdLineCtrlSample/CommandLineScope" //  /bin/ls" //path
-            self.excuteTask.arguments = [] //arguments
+            self.excuteTask.launchPath = path
+            self.excuteTask.arguments = arguments
             
             self.excuteTask.terminationHandler = {
                 
@@ -100,7 +103,6 @@ class ViewController: NSViewController {
             self.captureStandardOutputAndRouteToTextView(self.excuteTask)
             self.excuteTask.launch()
             self.excuteTask.waitUntilExit()
-            
         }
     }
     
