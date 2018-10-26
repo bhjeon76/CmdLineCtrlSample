@@ -80,6 +80,16 @@ class ViewController: NSViewController {
             return
         }
         
+        let taskRunning = self.excuteTask.isRunning
+        if taskRunning == true {
+            
+            print("Task running already")
+            
+            self.excuteButton.isEnabled = true
+            self.spinner.stopAnimation(self)
+            return
+        }
+        
         isRunning = true
         let taskQueue = DispatchQueue.global(qos: DispatchQoS.QoSClass.background)
 
@@ -102,6 +112,7 @@ class ViewController: NSViewController {
             
             self.captureStandardOutputAndRouteToTextView(self.excuteTask)
             self.excuteTask.launch()
+            
             self.excuteTask.waitUntilExit()
         }
     }
